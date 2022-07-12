@@ -17,6 +17,11 @@ const routes = [
         name: 'Weight',
         component: () => import('@/views/WeightPage.vue'),
     },
+    {
+        path: '/rock-paper-scissors',
+        name: 'RockPaperScissorsGame',
+        component: () => import('@/views/RockPaperScissorsGame.vue'),
+    },
 ]
 
 const router = createRouter({

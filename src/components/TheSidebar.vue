@@ -48,13 +48,13 @@
         <span class="text">Weight</span>
       </router-link>
       <router-link
-          to="/contact"
+          to="/rock-paper-scissors"
           class="button"
       >
         <span class="material-icons material-symbols-outlined">
-          mail
-        </span>
-        <span class="text">Contact</span>
+          sports_esports
+      </span>
+        <span class="text">Game</span>
       </router-link>
     </div>
 
