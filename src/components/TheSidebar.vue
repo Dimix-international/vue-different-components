@@ -56,6 +56,15 @@
       </span>
         <span class="text">Game</span>
       </router-link>
+      <router-link
+          to="/tic-tac-toe"
+          class="button"
+      >
+        <span class="material-icons material-symbols-outlined">
+          sports_esports
+      </span>
+        <span class="text">Game</span>
+      </router-link>
     </div>
 
     <div class="flex"></div>
