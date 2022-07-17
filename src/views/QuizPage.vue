@@ -1,11 +1,130 @@
 <template>
-  <div>Quiz</div>
+  <main class="app">
+    <h1>The Quiz</h1>
+
+    <section class="quiz" v-if="!quizCompleted">
+      <div class="quiz-info">
+        <span class="question">{{ getCurrentQuestion.question }}</span>
+        <span class="score">Score {{ score }}/{{ questions.length }}</span>
+      </div>
+
+      <div class="options">
+        <label
+            v-for="(option, index) in getCurrentQuestion.options"
+            :key="index"
+            :for="'option' + index"
+            :class="`option ${
+						getCurrentQuestion.selected === index
+							? index === getCurrentQuestion.answer
+								? 'correct'
+								: 'wrong'
+							: ''
+					} ${
+						getCurrentQuestion.selected !== null &&
+						index !== getCurrentQuestion.selected
+							? 'disabled'
+							: ''
+					}`">
+          <input
+              type="radio"
+              :id="'option' + index"
+              :name="getCurrentQuestion.index"
+              :value="index"
+              v-model="getCurrentQuestion.selected"
+              :disabled="getCurrentQuestion.selected !== null"
+              @change="SetAnswer"
+          />
+          <span>{{ option }}</span>
+        </label>
+      </div>
+
+      <button
+          @click="NextQuestion"
+          :disabled="getCurrentQuestion.selected === null">
+        {{
+          getCurrentQuestion.index == questions.length - 1
+              ? 'Finish'
+              : getCurrentQuestion.selected == null
+                  ? 'Select an option'
+                  : 'Next question'
+        }}
+      </button>
+    </section>
+
+    <section v-else>
+      <h2>You have finished the quiz!</h2>
+      <p>Your score is {{ score }}/{{ questions.length }}</p>
+    </section>
+  </main>
 </template>
 
-<script>
-export default {
-  name: "QuizPage"
-}
+<script setup>
+import {computed, ref} from "vue";
+
+  const questions = ref([
+    {
+      question: 'What is Vue?',
+      answer: 0,
+      options: [
+        'A framework',
+        'A library',
+        'A type of hat'
+      ],
+      selected: null
+    },
+    {
+      question: 'What is Vuex used for?',
+      answer: 2,
+      options: [
+        'Eating a delicious snack',
+        'Viewing things',
+        'State management'
+      ],
+      selected: null
+    },
+    {
+      question: 'What is Vue Router?',
+      answer: 1,
+      options: [
+        'An ice cream maker',
+        'A routing library for Vue',
+        'Burger sauce'
+      ],
+      selected: null
+    }
+  ]);
+
+  const quizCompleted = ref(false);
+  const currentQuestion = ref(0);
+  const score = computed(() => {
+  let value = 0
+    for (const q of questions.value) {
+      if (q.selected != null && +q.answer === +q.selected) {
+        value +=1;
+      }
+    }
+    return value
+  })
+
+  const getCurrentQuestion = computed(() => {
+    let question = questions.value[currentQuestion.value];
+    question.index = currentQuestion.value;
+    return question;
+  });
+
+  const SetAnswer = e => {
+    questions.value[currentQuestion.value].selected = +e.target.value;
+    e.target.value = null;
+  }
+
+  const NextQuestion = () => {
+    if(currentQuestion.value < questions.value.length - 1) {
+      currentQuestion.value++;
+      return;
+    }
+    quizCompleted.value = true;
+  }
+
 </script>
 
 <style scoped>
@@ -16,10 +135,12 @@ export default {
   align-items: center;
   padding: 2rem;
   height: 100vh;
+  color: #fff;
 }
 h1 {
   font-size: 2rem;
   margin-bottom: 2rem;
+  color: #000;
 }
 .quiz {
   background-color: #382a4b;
@@ -89,6 +210,7 @@ h2 {
   font-size: 2rem;
   margin-bottom: 2rem;
   text-align: center;
+  color: #000;
 }
 p {
   color: #8F8F8F;
