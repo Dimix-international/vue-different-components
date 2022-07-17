@@ -32,6 +32,11 @@ const routes = [
         name: 'SpeechRecognition',
         component: () => import('@/views/SpeechRecognition.vue'),
     },
+    {
+        path: '/quiz',
+        name: 'Quiz',
+        component: () => import('@/views/QuizPage.vue'),
+    },
 ]
 
 const router = createRouter({

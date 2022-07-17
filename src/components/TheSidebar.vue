@@ -74,6 +74,15 @@
         </span>
         <span class="text">Recognition</span>
       </router-link>
+      <router-link
+          to="/quiz"
+          class="button"
+      >
+        <span class="material-icons material-symbols-outlined">
+          quiz
+        </span>
+        <span class="text">Quiz</span>
+      </router-link>
     </div>
 
     <div class="flex"></div>
