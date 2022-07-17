@@ -42,9 +42,9 @@
           @click="NextQuestion"
           :disabled="getCurrentQuestion.selected === null">
         {{
-          getCurrentQuestion.index == questions.length - 1
+          getCurrentQuestion.index === questions.length - 1
               ? 'Finish'
-              : getCurrentQuestion.selected == null
+              : getCurrentQuestion.selected === null
                   ? 'Select an option'
                   : 'Next question'
         }}
