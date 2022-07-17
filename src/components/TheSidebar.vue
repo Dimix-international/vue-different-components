@@ -65,6 +65,15 @@
       </span>
         <span class="text">Game</span>
       </router-link>
+      <router-link
+          to="/speech-recognition"
+          class="button"
+      >
+        <span class="material-icons material-symbols-outlined">
+            graphic_eq
+        </span>
+        <span class="text">Recognition</span>
+      </router-link>
     </div>
 
     <div class="flex"></div>

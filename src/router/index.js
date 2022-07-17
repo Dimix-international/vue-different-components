@@ -27,6 +27,11 @@ const routes = [
         name: 'TicTacToe',
         component: () => import('@/views/TicTacToeGame.vue'),
     },
+    {
+        path: '/speech-recognition',
+        name: 'SpeechRecognition',
+        component: () => import('@/views/SpeechRecognition.vue'),
+    },
 ]
 
 const router = createRouter({
