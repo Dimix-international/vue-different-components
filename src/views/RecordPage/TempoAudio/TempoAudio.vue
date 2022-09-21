@@ -12,11 +12,10 @@
           <span>Address</span>
         </label>
         <input
-            ref="urlInput"
             id=url_input
             class=url_input
             type=url
-            value="https://websemantics.uk/pens/audio-tempo-change-fixed-pitch/media/hard-days-night.mp3"
+            :value="playerInputUrl"
             @change="changeSongURL"
         >
       </div>
@@ -85,6 +84,7 @@ export default {
     const urlInput = ref(null);
     const playerChords = ref(null);
 
+    const playerInputUrl = ref('');
     const tempo = ref('1');
     const playerAudio = ref('https://websemantics.uk/pens/audio-tempo-change-fixed-pitch/media/hard-days-night.mp3');
 
@@ -97,6 +97,7 @@ export default {
     const changeSongURL = function (e) {
       const { value } = e.target;
       playerAudio.value = value;
+      playerInputUrl.value = value;
       playerDisplay.value = value.split('\\').pop().split('/').pop();
       tempo.value = '1';
     }
@@ -112,6 +113,7 @@ export default {
         reader.onload = function (e) {
           playerAudio.value = e.target.result
           playerDisplay.value = file.name;
+          playerInputUrl.value = file.name;
         }
         reader.readAsDataURL(file);
       }
@@ -119,6 +121,7 @@ export default {
 
     onBeforeMount(() => {
       playerDisplay.value = playerAudio.value.split('\\').pop().split('/').pop();
+      playerInputUrl.value = playerAudio.value;
     })
 
 
@@ -132,6 +135,7 @@ export default {
       changeSongFile,
       tempo,
       playerAudio,
+      playerInputUrl,
     }
   }
 }
