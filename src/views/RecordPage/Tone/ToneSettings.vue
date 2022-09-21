@@ -1,8 +1,5 @@
 <template>
   <button @click="play">music</button>
-  <div>
-    <button @click="changeF">change</button>
-  </div>
 </template>
 
 <script>
@@ -23,28 +20,31 @@ export default {
 
     const play = () => {
 
-      //const pitch = new Tone.PitchShift(11).toDestination();
-/*      const reverb = new Tone.JCReverb({
-        roomSize: 0.5,
-        wet: 0.5
+      //https://xminus.me/track/309115/%D0%B2%D0%B4%D0%B2%D0%BE%D1%91%D0%BC - для сравнения
+      const pitch = new Tone.PitchShift({
+        pitch: 1, //на сайте от -7 до +5
+        wet: 1, //только 1, а то 2 голоса
+        feedback: 0,// 0 нету эха
+      }).toDestination();
+/*    const reverb = new Tone.JCReverb({
+        roomSize: 0.2,
+        wet: 1
       }).toDestination() //-- эхо - прикольно - распространение звука*/
-      //const delay = new Tone.PingPongDelay(0.5, 0.1).toDestination(); // эхо повторяющее
+      //const delay = new Tone.PingPongDelay(0.5, 0.1).toDestination();  эхо повторяющее
 
-     // const distor = new Tone.Distortion(0.2).toDestination(); //громкость и распространение
+     //const distor = new Tone.Distortion(0.2).toDestination(); //громкость и распространение
 
-     // const trem = new Tone.Tremolo(4, 0.6).toDestination().start(); //вначле эхо
+   //  const trem = new Tone.Tremolo(4, 0.6).toDestination().start(); //вначле эхо
 
       //const bitcrush = new Tone.BitCrusher(10).toDestination(); //количество битов - не услышал разницы
 
+   //   pitch.connect(reverb)
+
       Tone.loaded().then(() => {
-        player.connect();
+        player.connect(pitch);
         player.playbackRate = props.playbackRate;
         player.start();
       });
-    }
-
-    const changeF = () => {
-      console.log(player);
     }
 
     const preload = async () => {
@@ -61,7 +61,6 @@ export default {
 
     return {
       play,
-      changeF,
     }
   }
 }
