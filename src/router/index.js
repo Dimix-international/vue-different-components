@@ -28,9 +28,9 @@ const routes = [
         component: () => import('@/views/TicTacToeGame.vue'),
     },
     {
-        path: '/speech-recognition',
-        name: 'SpeechRecognition',
-        component: () => import('@/views/SpeechRecognition.vue'),
+        path: '/record',
+        name: 'Record',
+        component: () => import('@/views/RecordPage/RecordPage.vue'),
     },
     {
         path: '/quiz',

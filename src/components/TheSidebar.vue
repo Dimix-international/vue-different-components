@@ -66,7 +66,7 @@
         <span class="text">Game</span>
       </router-link>
       <router-link
-          to="/speech-recognition"
+          to="/record"
           class="button"
       >
         <span class="material-icons material-symbols-outlined">
