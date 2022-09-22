@@ -10,6 +10,7 @@
           accept="audio/*"
           @change="changeSongFile"
       >
+        <audio ref="audio" :src="playerAudio"></audio>
     </div>
       <div class="settings-tempo">
         <div class=tempo>
@@ -91,12 +92,11 @@ import {ref} from "vue";
 export default {
   name: "ToneSettings",
   setup() {
+    let player;
 
     const tempo = ref(1);
     const playerAudio = ref('');
     const tonality = ref(0);
-
-    let player;
 
     const play = async () => {
 
@@ -212,9 +212,10 @@ export default {
 .musio {
   padding: 50px 100px;
   display: flex;
+  width: 100%;
 }
 .container {
-  width: 350px;
+  flex: 0 0 350px;
   display: flex;
   flex-direction: column;
 }
@@ -275,6 +276,20 @@ export default {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+.animate {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background-color: blue;
 }
 
 </style>
