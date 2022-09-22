@@ -1,28 +1,108 @@
 <template>
-  <button @click="play">music</button>
+  <div class="musio">
+    <div class="container">
+      <div class=upload>
+      <label class=upload_label for=upload_input><span>Upload</span></label>
+      <input
+          id=upload_input
+          class=upload_input
+          type=file
+          accept="audio/*"
+          @change="changeSongFile"
+      >
+    </div>
+      <div class="settings-tempo">
+        <div class=tempo>
+          <label class=tempo_label for=tempo_input>Tempo</label>
+          <input
+              v-model="tempo"
+              class=tempo_input
+              ref="tempoInput"
+              id=tempo_input
+              type=range
+              min=0.5
+              max=1.5
+              step=0.1
+          >
+          <span class=tempo_display>{{ tempo }}</span>
+        </div>
+        <div class=tempo>
+          <label class=tempo_label for=tempo_input>Tonality</label>
+          <input
+              v-model="tonality"
+              class=tempo_input
+              ref="tempoInput"
+              id=tempo_input
+              type=range
+              min=-7
+              max=7
+              step=1
+          >
+          <span class=tempo_display>{{ tonality }}</span>
+        </div>
+      </div>
+      <div
+          class="button"
+          :class="{
+            disabled: !playerAudio
+          }"
+      >
+        <button
+            @click.prevent="play"
+            :disabled="!playerAudio"
+        >
+          play
+        </button>
+      </div>
+      <div
+          class="button"
+          :class="{
+            disabled: !playerAudio
+          }"
+      >
+        <button
+            @click.prevent="stop"
+            :disabled="!playerAudio"
+        >
+          stop
+        </button>
+      </div>
+      <div
+          class="button"
+          :class="{
+            disabled: !playerAudio
+          }"
+      >
+        <button
+            @click.prevent="transformAudio"
+            :disabled="!playerAudio"
+        >
+          Обработать
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import * as Tone from 'tone'
-import {onMounted, watch} from "vue";
+import {ref} from "vue";
 
 export default {
   name: "ToneSettings",
-  props: {
-    music: String,
-    playbackRate: {
-      type: Number,
-      default: 1.5,
-    },
-  },
-  setup(props) {
+  setup() {
+
+    const tempo = ref(1);
+    const playerAudio = ref('');
+    const tonality = ref(0);
+
     let player;
 
-    const play = () => {
+    const play = async () => {
 
       //https://xminus.me/track/309115/%D0%B2%D0%B4%D0%B2%D0%BE%D1%91%D0%BC - для сравнения
       const pitch = new Tone.PitchShift({
-        pitch: -5, //на сайте от -7 до +5
+        pitch: tonality.value, //на сайте от -7 до +5
         wet: 1, //только 1, а то 2 голоса
         feedback: 0,// 0 нету эха
       });
@@ -80,34 +160,121 @@ export default {
 
     // pitch.chain(eff1, eff2, Tone.Destination)
    //  pitch.connect(phaser)
-
-
-      Tone.loaded().then(() => {
-        player.chain(pitch, Tone.Destination);
-        player.playbackRate = props.playbackRate;
-        player.start();
-      });
+      await Tone.loaded();
+      player.chain(pitch, Tone.Destination);
+      player.playbackRate = tempo.value;
+      player.start();
     }
+
+    const stop = () => {
+      player.stop();
+    }
+
+    const changeSongFile = function (e) {
+      const target = e.currentTarget;
+      const file = target.files[0];
+      let reader;
+
+      if (target.files && file) {
+        reader = new FileReader();
+        reader.onload = function (e) {
+          playerAudio.value = e.target.result;
+          preload();
+        }
+        reader.readAsDataURL(file);
+      }
+    };
 
     const preload = async () => {
-      player = new Tone.Player(props.music);
+      player = new Tone.Player(playerAudio.value);
     }
 
-    watch(() => props.music, () => {
+    const transformAudio = () => {
+      stop();
       preload();
-    })
-
-    onMounted(() => {
-      preload()
-    })
+    }
 
     return {
       play,
+      tempo,
+      stop,
+      tonality,
+      changeSongFile,
+      playerAudio,
+      transformAudio,
     }
   }
 }
 </script>
 
 <style scoped>
+
+.musio {
+  padding: 50px 100px;
+  display: flex;
+}
+.container {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-tempo {
+  padding: 20px 0;
+}
+
+[class*="_label"] {
+  position: relative;
+  white-space: nowrap;
+  margin-right: .5em;
+  min-width: 4em;
+}
+[class*="_label"] > span {
+  display: block;
+  position: relative;
+  top: 50%;
+  transform: translatey(-50%);
+}
+[class*="_input"] {
+  display: inline-block;
+  line-height: 1;
+  width: 100%;
+  margin: 0;
+  padding: .25rem .5rem;
+  font: inherit;
+  border: 1px solid #fff;
+  background-color: rgba(255,255,255,.5);
+}
+
+.upload {
+  display: flex;
+  flex-direction: column;
+}
+
+.tempo_display {
+  font-weight: 700;
+  text-align: center;
+  display: block;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  height: 40px;
+  border-radius: 5px;
+  background-color: blue;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.button.disabled {
+  background-color: gray;
+}
+
+.button button {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 
 </style>
