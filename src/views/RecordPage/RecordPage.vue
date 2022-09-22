@@ -1,15 +1,14 @@
 <template>
-  <VizualFromMicrofone />
-  <ToneSettings />
+  <WebAudioAPI />
 </template>
 
 <script>
-import ToneSettings from "@/views/RecordPage/Tone/ToneSettings";
-import VizualFromMicrofone from "@/views/RecordPage/VizualFromMicrofone/VizualFromMicrofone";
+
+import WebAudioAPI from "@/views/RecordPage/WebAudioAPI/WebAudioAPI";
 
 export default {
   name: "RecordPage",
-  components: {VizualFromMicrofone, ToneSettings, }
+  components: {WebAudioAPI }
 }
 </script>
 

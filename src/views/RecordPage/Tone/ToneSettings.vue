@@ -105,7 +105,7 @@ export default {
 
 
     const pitch = new Tone.PitchShift({
-      pitch: tonality.value, //на сайте от -7 до +5
+      pitch: tonality.value,
       wet: 1, //только 1, а то 2 голоса
       feedback: 0,// 0 нету эха
     }).toDestination();
