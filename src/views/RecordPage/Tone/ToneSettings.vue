@@ -103,6 +103,7 @@ export default {
       size: 1024
     }).toDestination();*/
 
+
     const pitch = new Tone.PitchShift({
       pitch: tonality.value, //на сайте от -7 до +5
       wet: 1, //только 1, а то 2 голоса

@@ -66,6 +66,7 @@ export default {
       idReqAnimFrame.value =  requestAnimationFrame(drawVisualizer);
 
       const bufferLength = analyzerNode.value.frequencyBinCount;
+
       const dataArray = new Uint8Array(bufferLength);
       analyzerNode.value.getByteFrequencyData(dataArray);
 
