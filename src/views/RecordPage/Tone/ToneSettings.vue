@@ -87,25 +87,28 @@
 
 <script>
 import * as Tone from 'tone'
-import {ref} from "vue";
+import {ref, onMounted, watch} from "vue";
+
 
 export default {
   name: "ToneSettings",
   setup() {
     let player;
+    let pitch;
 
     const tempo = ref(1);
     const playerAudio = ref('');
     const tonality = ref(0);
+    const analyzerNode = ref(null);
 
     const play = async () => {
 
       //https://xminus.me/track/309115/%D0%B2%D0%B4%D0%B2%D0%BE%D1%91%D0%BC - для сравнения
-      const pitch = new Tone.PitchShift({
+       pitch = new Tone.PitchShift({
         pitch: tonality.value, //на сайте от -7 до +5
         wet: 1, //только 1, а то 2 голоса
         feedback: 0,// 0 нету эха
-      });
+      }).toDestination();
 
 /*      const autoWah = new Tone.AutoWah({
         Q: 1,
@@ -161,7 +164,7 @@ export default {
     // pitch.chain(eff1, eff2, Tone.Destination)
    //  pitch.connect(phaser)
       await Tone.loaded();
-      player.chain(pitch, Tone.Destination);
+      player.connect(pitch);
       player.playbackRate = tempo.value;
       player.start();
     }
@@ -193,6 +196,16 @@ export default {
       stop();
       preload();
     }
+
+    watch(tempo , newV => player.playbackRate = newV);
+    watch(tonality , newV => {pitch.pitch = newV});
+
+    onMounted(() => {
+      analyzerNode.value = new Tone.Analyser({
+        type: 'fft',
+        size: 1024
+      }).toDestination();
+    });
 
     return {
       play,
