@@ -70,22 +70,14 @@
       </div>
 
     </div>
-    <div>
-      <ToneSettings
-          :music="playerAudio"
-          :playbackRate="+tempo"
-      />
-    </div>
   </div>
 </template>
 
 <script>
 import {onBeforeMount, ref} from "vue";
-import ToneSettings from "@/views/RecordPage/Tone/ToneSettings";
 
 export default {
   name: "TempoAudio",
-  components: {ToneSettings},
   setup () {
     const playerDisplay = ref(null);
     const tempoInput = ref(null);
