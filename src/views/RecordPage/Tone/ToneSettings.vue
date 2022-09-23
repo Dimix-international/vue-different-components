@@ -16,7 +16,7 @@
         <div class=tempo>
           <label class=tempo_label for=tempo_input>Tempo</label>
           <input
-              v-model="tempo"
+              :value="tempo"
               class=tempo_input
               ref="tempoInput"
               id=tempo_input
@@ -24,20 +24,22 @@
               min=0.5
               max=1.5
               step=0.1
+              @change="changeTempo"
           >
           <span class=tempo_display>{{ tempo }}</span>
         </div>
         <div class=tempo>
           <label class=tempo_label for=tempo_input>Tonality</label>
           <input
-              v-model="tonality"
+              :value="tonality"
               class=tempo_input
               ref="tempoInput"
               id=tempo_input
               type=range
-              min=-7
-              max=7
+              min=-15
+              max=15
               step=1
+              @change="changeTonality"
           >
           <span class=tempo_display>{{ tonality }}</span>
         </div>
@@ -87,28 +89,24 @@
 
 <script>
 import * as Tone from 'tone'
-import {ref, watch} from "vue";
+import {ref} from "vue";
+import {countOffsetTonality} from "@/views/RecordPage/Tone/countOffsetTonality";
 
 
 export default {
   name: "ToneSettings",
   setup() {
     let player;
+    let pitch;
 
     const tempo = ref(1);
+    const pitchTempo = ref(0);
     const playerAudio = ref('');
     const tonality = ref(0);
 /*    const analyzerNode = new Tone.Analyser({
       type: 'fft',
       size: 1024
     }).toDestination();*/
-
-
-    const pitch = new Tone.PitchShift({
-      pitch: tonality.value,
-      wet: 1, //только 1, а то 2 голоса
-      feedback: 0,// 0 нету эха
-    }).toDestination();
 
     const play = async () => {
 
@@ -167,6 +165,14 @@ export default {
 
     // pitch.chain(eff1, eff2, Tone.Destination)
    //  pitch.connect(phaser)
+
+
+      pitch = new Tone.PitchShift({
+        pitch: +tonality.value + pitchTempo.value,
+        wet: 1, //только 1, а то 2 голоса
+        feedback: 0,// 0 нету эха
+      }).toDestination();
+
       await Tone.loaded();
       player.connect(pitch);
       player.playbackRate = tempo.value;
@@ -201,8 +207,28 @@ export default {
       preload();
     }
 
-    watch(tempo , newV => player.playbackRate = newV);
-    watch(tonality , newV => pitch.pitch = newV );
+    const changeTempo = (e) => {
+      const {value} = e.target;
+      const numberValue = +value;
+      tempo.value = numberValue;
+      pitchTempo.value = countOffsetTonality(+((numberValue * 100).toFixed(0)));
+
+      if (player) {
+        player.playbackRate = numberValue;
+      }
+      if (pitch) {
+        pitch.pitch = +tonality.value + pitchTempo.value;
+      }
+    }
+
+    const changeTonality = (e) => {
+      const {value} = e.target;
+      tonality.value = +value;
+
+      if (pitch) {
+        pitch.pitch = +pitchTempo.value + +value;
+      }
+    }
 
 
     return {
@@ -213,6 +239,8 @@ export default {
       changeSongFile,
       playerAudio,
       transformAudio,
+      changeTonality,
+      changeTempo,
     }
   }
 }
