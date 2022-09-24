@@ -75,6 +75,7 @@
 
 <script>
 import {onBeforeMount, ref} from "vue";
+import {Gain, PitchShift, UserMedia} from "tone";
 
 export default {
   name: "TempoAudio",
@@ -88,7 +89,12 @@ export default {
     const tempo = ref('1');
     const playerAudio = ref('https://websemantics.uk/pens/audio-tempo-change-fixed-pitch/media/hard-days-night.mp3');
 
-    const changeTempo = function (e) {
+    const changeTempo = async function (e) {
+      let gain = new Gain(0.3).toDestination();
+      let mic = new UserMedia();
+      let pitchShift = new PitchShift(10).connect(gain).toDestination();
+      mic.connect(pitchShift);
+      await mic.open();
       const { value } = e.target;
       tempo.value = value;
       playerChords.value = playerAudio.value.replace('.mp3', '.vtt');

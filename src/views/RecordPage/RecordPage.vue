@@ -1,16 +1,15 @@
 <template>
-  <ToneSettings />
-  <VizualFromMicrofone />
+  <TempoAudio />
 </template>
 
 <script>
 
-import ToneSettings from "@/views/RecordPage/Tone/ToneSettings";
-import VizualFromMicrofone from "@/views/RecordPage/VizualFromMicrofone/VizualFromMicrofone";
+
+import TempoAudio from "@/views/RecordPage/TempoAudio/TempoAudio";
 
 export default {
   name: "RecordPage",
-  components: {VizualFromMicrofone, ToneSettings }
+  components: {TempoAudio}
 }
 </script>
 
