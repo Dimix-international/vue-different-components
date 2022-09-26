@@ -1,15 +1,15 @@
 <template>
-  <TempoAudio />
+  <SoundAudio />
 </template>
 
 <script>
 
 
-import TempoAudio from "@/views/RecordPage/TempoAudio/TempoAudio";
+import SoundAudio from "@/views/RecordPage/TempoAudio/SoundAudio/SoundAudio";
 
 export default {
   name: "RecordPage",
-  components: {TempoAudio}
+  components: {SoundAudio}
 }
 </script>
 

@@ -10,6 +10,8 @@
   "dependencies": {
     "chart.js": "^3.8.0",
     "core-js": "^3.8.3",
+    "custom-audio-node": "^0.3.1",
+    "soundbank-pitch-shift": "^1.0.3",
     "tone": "^14.7.77",
     "vue": "^3.2.13",
     "vue-chartjs": "^4.1.1",
